@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\Fabric;
 use App\Models\Size;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Session;
 
 class ProductTypeController extends Controller
 {
@@ -151,18 +152,18 @@ class ProductTypeController extends Controller
         return redirect(route('products_types.index', [$productTypeId]))->with('تم', 'تمت اضافة المنتج بنجاح');
     }
 
-    public function show(ProductType $products_types, $id)
+    public function show(Request $request)
     {
         $products = Product::all();
+        $id = $request->id ;
+        $imgId = $request->imgId ;
         $products_types = ProductType::find($id);
         $comments = $products_types->comment()->latest()->paginate(15);
         $images   = $products_types -> images()->get();
         $colors = Color::all();
-
-
         $mainProducts = ProductType::all();
 
-        return view('site.details.eachProduct', compact('products_types','comments','products', 'mainProducts', 'images', 'colors'));
+        return view('site.details.eachProduct', compact('id','products_types','comments','products', 'mainProducts', 'images', 'colors', 'imgId'));
     }
 
     public function edit($id)

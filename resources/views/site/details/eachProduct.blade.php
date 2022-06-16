@@ -244,26 +244,45 @@
                     <div id="imgtext"></div>
                 </div>
                 {{-- ////////////////////////////////////////////////////// الصور الصغيرة //////////////////////////////////////////////////////////////////////////  --}}
-                <div class="row">
-                    {{-- @foreach ($images as $image)
-                        @foreach ($image->photo as $photo)
-                            <div class="column">
-                                <img src="{{ URL::asset('/uploads/images/'.$photo) }}" alt="" style="width:100%" onclick="myFunctionProduct(this);" width = '60' height='85'>
-                </div>
-                @endforeach
-                @endforeach --}}
+                    @php
+                        $y = 0;
+                    @endphp
+
+                    {{-- @if ($imgId == null )
+                        @foreach( $images[0]->photo as $key)
+                            <img id="img" src="{!!URL::asset('/uploads/images/'.$key) !!}" alt="..." class="px-0" width='50px'>
+                        @endforeach
+                    @else
+                        @foreach ($images as $image)
+                            @if($image->id == $imgId)
+                                @foreach ($image->photo as $photo)
+                                <img id="img" src="{!!URL::asset('/uploads/images/'.$photo) !!}" alt="..." class="px-0" width='50px'>
+                                @endforeach
+                            @endif
+                        @endforeach
+                    @endif
+                    <br><br>
+                    @foreach($colors as $color)
+                        @foreach ($images as $image)
+                            @if($color->id == $image->color_id)
+                            <a href="{{ route('products_types.show', ['imgId'=>$image->id, 'id'=> $id ]) }}" class="btn text-success rounded-circle border p-3 m-1" style="background-color:{{ $color->value }}"><small>  </small></a>
+                            @endif
+                        @endforeach
+                    @endforeach
+                <script>
+                    function myFunctionProduct(imgs) {
+                        var expandImg = document.getElementById("expandedImg");
+                        var imgText = document.getElementById("imgtext");
+                        expandImg.src = imgs.src;
+                        imgText.innerHTML = imgs.alt;
+                        expandImg.parentElement.style.display = "block";
+                    }
+                </script> --}}
+                <div id='mySpriteSpin'></div>
+
+
             </div>
 
-            @php
-
-            $y = 0;
-            @endphp
-
-            <input class="msg" type="text" hidden id="ali" name="" value="fkgpodfjgph-o">
-
-            <div class="msg" style="background-color: red">
-
-                <?php echo 'Hello ' . htmlspecialchars($_GET("ali")) ; ?>
 
 
 
@@ -272,64 +291,66 @@
 
 
 
-                <script>
 
+
+
+
+
+
+
+
+
+
+            <script type='text/javascript'>
+                $("#mySpriteSpin").spritespin({
+                  // path to the source images.
+                  source: [
+                  "/src/photos/pageImage/01.png'",
+                  "/src/photos/pageImage/02.png'",
+                  "/src/photos/pageImage/03.png",
+                  "/src/photos/pageImage/04.png",
+                  "/src/photos/pageImage/05.png'",
+                  "/src/photos/pageImage/06.png'",
+                  "/src/photos/pageImage/07.png",
+                  "/src/photos/pageImage/01.png'",
+                  "/src/photos/pageImage/02.png'",
+                  "/src/photos/pageImage/03.png",
+                  "/src/photos/pageImage/04.png",
+                  "/src/photos/pageImage/05.png'",
+                  "/src/photos/pageImage/06.png'",
+                  "/src/photos/pageImage/07.png","/src/photos/pageImage/01.png'",
+                  "/src/photos/pageImage/02.png'",
+                  "/src/photos/pageImage/01.png'",
+                  "/src/photos/pageImage/02.png'",
+                  "/src/photos/pageImage/03.png",
+                  "/src/photos/pageImage/04.png",
+                  "/src/photos/pageImage/05.png'",
+                  "/src/photos/pageImage/06.png'",
+                  "/src/photos/pageImage/07.png",
+                  "/src/photos/pageImage/01.png'",
+                  "/src/photos/pageImage/02.png'",
+                  "/src/photos/pageImage/03.png", "/src/photos/pageImage/01.png'",
+                  "/src/photos/pageImage/02.png'",
+                  "/src/photos/pageImage/03.png",
+                  "/src/photos/pageImage/04.png",
+                  "/src/photos/pageImage/05.png'",
+                  "/src/photos/pageImage/06.png'",
+                  "/src/photos/pageImage/07.png",
+                  "/src/photos/pageImage/01.png'",
+                  "/src/photos/pageImage/02.png'",
+                  "/src/photos/pageImage/03.png",
+                  ],
+                  width   : 600,  // width in pixels of the window/frame
+                  height  : 400,  // height in pixels of the window/frame
+                  frames  : 36,
+                  frameTime : 500  ,
+
+
+                });
                 </script>
 
 
 
-                {{-- @foreach ($images as $image)
-
-                {{ $image->id ==  $_GET(ali)}}
-                @endforeach --}}
-
-
-            </div>
-            <br><br>
-
-            <div class="row">
-                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-
-                    @foreach($colors as $color)
-                    @foreach ($images as $image)
-                    @if($color->id == $image->color_id)
-                    <button type="submit" class="btn" id='{{ $image->id }}'>sam</button>
-                    {{-- <img src="{{ URL::asset('/uploads/images/'.$image->photo) }}" alt="" style="width:100%" onclick="myFunctionProduct(this);" width = '60' height='85'> --}}
-                    @endif
-                    @endforeach
-
-                    @endforeach
-                </div>
-
-            </div>
-
-
-            <script>
-                console.clear();
-
-                let btns = document.querySelectorAll('button');
-
-                btns.forEach(function(i) {
-                    i.addEventListener('click', function() {
-                        var x = i.id;
-                        var xx = '<?php echo $images ?>';
-                        console.log("xx ==>" + xx);
-                        console.log("x  ==> " + x);
-
-                        console.log(typeof xx == 'string');
-
-                        console.log(JSON.parse(xx));
-
-                        var asa = JSON.parse(xx).find(element => element.id == i.id);
-
-                        console.log(asa);
-
-                        var y = x;
-
-                    });
-                });
-
-            </script>
 
 
 
@@ -337,96 +358,88 @@
 
 
 
-            <script>
-                function myFunctionProduct(imgs) {
-                    var expandImg = document.getElementById("expandedImg");
-                    var imgText = document.getElementById("imgtext");
-                    expandImg.src = imgs.src;
-                    imgText.innerHTML = imgs.alt;
-                    expandImg.parentElement.style.display = "block";
-                }
 
-            </script>
+
 
             {{-- ////////////////////////////////////////////////////// الصور الصغيرة النهاية//////////////////////////////////////////////////////////////////////////  --}}
-        </div>
-        <div class="col-md-4 p-5">
-            <div class="card-body">
-                <h5 class="card-title ">{{ $products_types->name }}</h5>
-                @if (isset($products_types->offers->discount))
-                <h6 class='text-danger small'><s>{{ $products_types->price . ' ع د ' }}</s>{{ ' - ' }} {{ $products_types->offers->discount . ' ع د ' }}</h6>
-                @else
-                <h6 class='text-danger small'>{{ $products_types->price . ' ع د ' }}</h6>
-                @endif
-                {{-- <h6>{{ $products_types->rate }}</h6> --}}
-                <h6 class='small'>القطع المتوفرة: {{ $products_types->number }}</h6>
-                @php
-                $allcolor = explode('-', $products_types->color);
-                $allsize = explode('-', $products_types->size);
-                $allfabric = explode('-', $products_types->fabric);
-                @endphp
-                <h6>
-                    <form action="{{ route('cart.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class='hidden'>
-                            <input type="hidden" value="{{ $products_types->id }}" name="id">
-                            <input type="text" value="{{ $products_types->name }}" name="name">
-                            @if (isset($products_types->offers->discount))
-                            <input type="" value="{{ $products_types->offers->discount }}" name="price">
-                            @else
-                            <input type="" value="{{ $products_types->price }}" name="price">
-                            @endif
-                            <input type="hidden" value="{{ $products_types->image }}" name="photo[]">
-                        </div>
-                        <div class='mt-1'>
-                            <h6 class="card-text small">نوع القماش</h6>
-                            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group" role="group" aria-label="First group">
-                                    @foreach ($allfabric as $fabric)
-                                    <div class='form-check form-check-inline p-0 m-0'>
-                                        <input type="radio" value="{{ $fabric }}" name="fabric" class="btn-check" id="{{ $fabric }}" autocomplete="off">
-                                        <label for="{{ $fabric }}" class="btn btn-outline-secondary px-2">{{ $fabric }}</label>
+
+            <div class="col-md-4 p-5">
+                <div class="card-body">
+                    <h5 class="card-title ">{{ $products_types->name }}</h5>
+                    @if (isset($products_types->offers->discount))
+                    <h6 class='text-danger small'><s>{{ $products_types->price . ' ع د ' }}</s>{{ ' - ' }} {{ $products_types->offers->discount . ' ع د ' }}</h6>
+                    @else
+                    <h6  class='text-danger small'>{{ $products_types->price . ' ع د ' }}</h6>
+                    @endif
+                    {{-- <h6>{{ $products_types->rate }}</h6> --}}
+                    <h6 class='small'>القطع المتوفرة: {{ $products_types->number }}</h6>
+                    @php
+                    $allcolor = explode('-', $products_types->color);
+                    $allsize = explode('-', $products_types->size);
+                    $allfabric = explode('-', $products_types->fabric);
+                    @endphp
+                    <h6>
+                        <form action="{{ route('cart.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class='hidden'>
+                                <input type="hidden" value="{{ $products_types->id }}" name="id">
+                                <input type="text" value="{{ $products_types->name }}" name="name">
+                                @if (isset($products_types->offers->discount))
+                                <input type="" value="{{ $products_types->offers->discount }}" name="price">
+                                @else
+                                <input type="" value="{{ $products_types->price }}" name="price">
+                                @endif
+                                <input type="hidden" value="{{ $products_types->image }}" name="photo[]">
+                            </div>
+                            <div class='mt-1'>
+                                <h6 class="card-text small">نوع القماش</h6>
+                                <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+                                    <div class="btn-group" role="group" aria-label="First group">
+                                        @foreach ($allfabric as $fabric)
+                                        <div class='form-check form-check-inline p-0 m-0'>
+                                            <input type="radio" value="{{ $fabric }}" name="fabric" class="btn-check" id="{{ $fabric }}" autocomplete="off">
+                                            <label for="{{ $fabric }}" class="btn btn-outline-secondary px-2">{{ $fabric }}</label>
+                                        </div>
+                                        @endforeach
                                     </div>
-                                    @endforeach
                                 </div>
                             </div>
-                        </div>
-                        <div class='mt-1'>
-                            <h6 class="card-text small">اللون</h6>
-                            @foreach ($allcolor as $color)
-                            <div class="form-check form-check-inline">
-                                <input style="background-color:{{ $color }} " class="form-check-input" type="radio" name="color" id="inlineRadio2" value="{{ $color }}">
+                            <div class='mt-1'>
+                                <h6 class="card-text small">اللون</h6>
+                                @foreach ($allcolor as $color)
+                                <div class="form-check form-check-inline">
+                                    <input style="background-color:{{ $color }} " class="form-check-input" type="radio" name="color" id="inlineRadio2" value="{{ $color }}">
+                                </div>
+                                @endforeach
                             </div>
-                            @endforeach
-                        </div>
-                        <div class='mt-1'>
-                            <h6 class="card-text small">الحجم</h6>
-                            @foreach ($allsize as $size)
-                            <div class='form-check form-check-inline p-0 m-0'>
-                                <input type="radio" value="{{ $size }}" name="size" class="btn-check" id="{{ $size }}" autocomplete="off">
-                                <label class="btn btn-outline-secondary px-2" for="{{ $size }}">{{ $size }}</label>
+                            <div class='mt-1'>
+                                <h6 class="card-text small">الحجم</h6>
+                                @foreach ($allsize as $size)
+                                <div class='form-check form-check-inline p-0 m-0'>
+                                    <input type="radio" value="{{ $size }}" name="size" class="btn-check" id="{{ $size }}" autocomplete="off">
+                                    <label class="btn btn-outline-secondary px-2" for="{{ $size }}">{{ $size }}</label>
+                                </div>
+                                @endforeach
                             </div>
-                            @endforeach
-                        </div>
-                        <button class="px-1 py-1 text-white  rounded mt-4 small" style="background-color: black">اضافة الى السلة <i class="bi bi-cart4"></i></button>
-                        <div class="number-input bg-light">
-                            <a onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"><i class="bi bi-dash"></i>
-                            </a>
-                            <input class="quantity" min="0" name="quantity" value="1" type="number">
-                            <a onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"><i class="bi bi-plus"></i>
-                            </a>
-                        </div>
-                    </form>
-                    <form action="{!!route ('favorites.save' , $products_types->id)!!}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <button class="submit btn btn-dark mx-0 mt-1">
-                            <p class="small m-0">اضف الى قائمة المفضلات <i class="bi bi-heart"></i></p>
-                        </button>
-                    </form>
-                </h6>
+                            <button class="px-1 py-1 text-white  rounded mt-4 small" style="background-color: black">اضافة الى السلة <i class="bi bi-cart4"></i></button>
+                            <div class="number-input bg-light">
+                                <a onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"><i class="bi bi-dash"></i>
+                                </a>
+                                <input class="quantity" min="0" name="quantity" value="1" type="number">
+                                <a onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"><i class="bi bi-plus"></i>
+                                </a>
+                            </div>
+                        </form>
+                        <form action="{!!route ('favorites.save' , $products_types->id)!!}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <button class="submit btn btn-dark mx-0 mt-1">
+                                <p class="small m-0">اضف الى قائمة المفضلات <i class="bi bi-heart"></i></p>
+                            </button>
+                        </form>
+                    </h6>
+                </div>
             </div>
         </div>
-    </div>
     </div>
     <div class="card border-success mb-3 mt-5">
         <div class=" bg-transparent border-success">
@@ -522,6 +535,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 

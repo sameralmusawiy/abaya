@@ -153,6 +153,8 @@ Route::namespace('products')->group(function() {
     Route::post('/products_types/index', 'ProductTypeController@siteSearch')->name('products_types.siteSearch');
 
     Route::resource('products_types', 'ProductTypeController');
+    Route::GET('/products_types/show/{id}/{imgId?}', 'ProductTypeController@show')->name('products_types.show');
+
 });
 
 Route::namespace('products')->group(function() {

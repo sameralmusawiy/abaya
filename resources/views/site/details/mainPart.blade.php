@@ -142,7 +142,7 @@
                                 @else
                                     <h6 class='text-danger small'>{{ $products_type->price . ' ع د ' }}</h6>
                                 @endif
-                                <a class='btn bg-dark text-white' href="{!!route ('products_types.show', $products_type->id)!!}" title="Show"><h6 class='small m-0'>عرض التفاصيل</h6></a>
+                                <a class='btn bg-dark text-white' href="{!!route ('products_types.show', ['id'=>$products_type->id ])!!}" title="Show"><h6 class='small m-0'>عرض التفاصيل</h6></a>
                             </div>
                         </div>
                         </a>

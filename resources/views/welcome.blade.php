@@ -80,12 +80,13 @@
 
     #mineCard{
         border-radius:10px;
+        transition-duration: .5s ;
+
     }
     #mineCard:hover{
         box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
         transform: translateY(-10px);
         opacity: 1;
-        transition-duration: .3s;
         border-radius:25px;
     }
 
@@ -103,12 +104,16 @@
         border-radius:50px;
         font-family: 'Lateef', cursive;
         font-size: 20px;
+        transition-duration: .5s ;
+
         }
     .btn-more:hover {
         box-shadow: 0px 37px 20px -20px rgba(0, 0, 0, 0.2);
         -webkit-transform: translate(0px, -10px) scale(1.1);
         transform: translate(0px, -10px) scale(1.1);
         color: #fff;
+        transition-duration: .5s ;
+
 
     }
 
