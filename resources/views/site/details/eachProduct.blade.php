@@ -2,6 +2,8 @@
 
 @section('content')
 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" type='text/javascript'></script>
+    <script src='https://unpkg.com/spritespin@x.x.x/release/spritespin.js' type='text/javascript'></script>
 
 
 <style>
@@ -244,19 +246,40 @@
                     <div id="imgtext"></div>
                 </div>
                 {{-- ////////////////////////////////////////////////////// الصور الصغيرة //////////////////////////////////////////////////////////////////////////  --}}
+
+                {{-- <div id='mySpriteSpin'></div> --}}
+
+
+
+
+
                     @php
+                    $arr = [];
+                    // dd($arr);
                         $y = 0;
                     @endphp
 
-                    {{-- @if ($imgId == null )
+                    {{-- <div id='frame'>
+                        {{ $images[0]->photo }}
+                    </div> --}}
+
+                    @if ($imgId == null )
                         @foreach( $images[0]->photo as $key)
                             <img id="img" src="{!!URL::asset('/uploads/images/'.$key) !!}" alt="..." class="px-0" width='50px'>
+                            @php
+                                $url = '/uploads/images/'.$key;
+                                array_push($arr, $url);
+                            @endphp
                         @endforeach
                     @else
                         @foreach ($images as $image)
                             @if($image->id == $imgId)
                                 @foreach ($image->photo as $photo)
                                 <img id="img" src="{!!URL::asset('/uploads/images/'.$photo) !!}" alt="..." class="px-0" width='50px'>
+                                @php
+                                    $url = '/uploads/images/'.$photo;
+                                    array_push($arr, $url);
+                                @endphp
                                 @endforeach
                             @endif
                         @endforeach
@@ -277,10 +300,7 @@
                         imgText.innerHTML = imgs.alt;
                         expandImg.parentElement.style.display = "block";
                     }
-                </script> --}}
-                <div id='mySpriteSpin'></div>
-
-
+                </script>
             </div>
 
 
@@ -301,53 +321,6 @@
 
 
 
-            <script type='text/javascript'>
-                $("#mySpriteSpin").spritespin({
-                  // path to the source images.
-                  source: [
-                  "/src/photos/pageImage/01.png'",
-                  "/src/photos/pageImage/02.png'",
-                  "/src/photos/pageImage/03.png",
-                  "/src/photos/pageImage/04.png",
-                  "/src/photos/pageImage/05.png'",
-                  "/src/photos/pageImage/06.png'",
-                  "/src/photos/pageImage/07.png",
-                  "/src/photos/pageImage/01.png'",
-                  "/src/photos/pageImage/02.png'",
-                  "/src/photos/pageImage/03.png",
-                  "/src/photos/pageImage/04.png",
-                  "/src/photos/pageImage/05.png'",
-                  "/src/photos/pageImage/06.png'",
-                  "/src/photos/pageImage/07.png","/src/photos/pageImage/01.png'",
-                  "/src/photos/pageImage/02.png'",
-                  "/src/photos/pageImage/01.png'",
-                  "/src/photos/pageImage/02.png'",
-                  "/src/photos/pageImage/03.png",
-                  "/src/photos/pageImage/04.png",
-                  "/src/photos/pageImage/05.png'",
-                  "/src/photos/pageImage/06.png'",
-                  "/src/photos/pageImage/07.png",
-                  "/src/photos/pageImage/01.png'",
-                  "/src/photos/pageImage/02.png'",
-                  "/src/photos/pageImage/03.png", "/src/photos/pageImage/01.png'",
-                  "/src/photos/pageImage/02.png'",
-                  "/src/photos/pageImage/03.png",
-                  "/src/photos/pageImage/04.png",
-                  "/src/photos/pageImage/05.png'",
-                  "/src/photos/pageImage/06.png'",
-                  "/src/photos/pageImage/07.png",
-                  "/src/photos/pageImage/01.png'",
-                  "/src/photos/pageImage/02.png'",
-                  "/src/photos/pageImage/03.png",
-                  ],
-                  width   : 600,  // width in pixels of the window/frame
-                  height  : 400,  // height in pixels of the window/frame
-                  frames  : 36,
-                  frameTime : 500  ,
-
-
-                });
-                </script>
 
 
 
@@ -355,6 +328,125 @@
 
 
 
+
+                <div id='spritespin'></div>
+
+                <button id="prev">PREV</button>
+                <button id="next">NEXT</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    // use helper method to generate an array of image urls. We have 34 frames in total
+
+    // const frames = '<?php  $arr ?>';
+
+
+    // frames.forEach(function(element){
+
+    //    console.log(element) ;
+    // });
+
+
+    // const frames = [
+    //     '/src/photos/pageImage/Filename_01.jpg',
+    //     '/src/photos/pageImage/Filename_02.jpg',
+    //     '/src/photos/pageImage/Filename_03.jpg',
+    //     '/src/photos/pageImage/Filename_04.jpg',
+    //     '/src/photos/pageImage/Filename_05.jpg',
+    //     '/src/photos/pageImage/Filename_06.jpg',
+    //     '/src/photos/pageImage/Filename_07.jpg',
+    //     '/src/photos/pageImage/Filename_08.jpg',
+    //     '/src/photos/pageImage/Filename_09.jpg',
+    //     '/src/photos/pageImage/Filename_10.jpg',
+    //     '/src/photos/pageImage/Filename_11.jpg',
+    //     '/src/photos/pageImage/Filename_12.jpg',
+    //     '/src/photos/pageImage/Filename_13.jpg',
+    //     '/src/photos/pageImage/Filename_14.jpg',
+    //     '/src/photos/pageImage/Filename_15.jpg',
+    //     '/src/photos/pageImage/Filename_16.jpg',
+    //     '/src/photos/pageImage/Filename_17.jpg',
+    //     '/src/photos/pageImage/Filename_18.jpg',
+    //     '/src/photos/pageImage/Filename_19.jpg',
+
+    // ];
+
+    // console.log(frame);
+
+
+
+
+
+
+// these are the frame numbers that will show a detail bubble
+var details = [0, 8, 20];
+// the current index in the details array
+var detailIndex = 0;
+
+// initialise spritespin
+var spin = $('#spritespin');
+spin.spritespin({
+    source: '<?php  $arr ?>',
+    width: 480,
+    sense: -1,
+    height: 327,
+    animate: false
+});
+// get the api object. This is used to trigger animation to play up to a specific frame
+var api = spin.spritespin("api");
+
+spin.bind("onLoad", function(){
+    var data = api.data;
+    data.stage.prepend($(".details .detail")); // add current details
+    data.stage.find(".detail").hide();         // hide current details
+}).bind("onFrame", function(){
+    var data = api.data;
+    data.stage.find(".detail:visible").stop(false).fadeOut();
+    data.stage.find(".detail.detail-" + data.frame).stop(false).fadeIn();
+});
+
+$( "#prev" ).click(function(){
+    setDetailIndex(detailIndex - 1);
+});
+
+$( "#next" ).click(function(){
+    setDetailIndex(detailIndex + 1);
+});
+
+function setDetailIndex(index){
+    detailIndex = index;
+    if (detailIndex < 0){
+        detailIndex = details.length - 1;
+    }
+    if (detailIndex >= details.length){
+        detailIndex = 0;
+    }
+    api.playTo(details[detailIndex]);
+}
+</script>
 
 
 
