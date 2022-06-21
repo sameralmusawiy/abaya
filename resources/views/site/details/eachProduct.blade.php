@@ -2,9 +2,6 @@
 
 @section('content')
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" type='text/javascript'></script>
-    <script src='https://unpkg.com/spritespin@x.x.x/release/spritespin.js' type='text/javascript'></script>
-
 
 <style>
     .content {
@@ -230,8 +227,8 @@
 <main class='content '>
     <div class="card mb-3 " style="max-width: 1600px;">
         <div class="row g-0">
-            <div class="col-md-8 p-5">
-                <div class=" container bigImage ">
+            <div class="col-md-8 p-2">
+                {{-- <div class=" container bigImage ">
                     @php
                     $imgSrcArr = [];
                     @endphp
@@ -244,209 +241,104 @@
                     <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                     <img src="{{ $imgSrcArr[0] }}" id="expandedImg" style="width:100%" class="p-3">
                     <div id="imgtext"></div>
-                </div>
+                </div> --}}
                 {{-- ////////////////////////////////////////////////////// الصور الصغيرة //////////////////////////////////////////////////////////////////////////  --}}
-
-                {{-- <div id='mySpriteSpin'></div> --}}
-
-
-
-
-
-                    @php
+                <div class="row">
+                    <div class="d-block text-center">
+                        <div id='spritespin'></div>
+                        <a class='btn rounded-circle border p-2 m-1 d-inline' id="prev"><i class="bi bi-caret-right"></i></a>
+                        <a class='btn rounded-circle border p-2 m-1 d-inline' id="next"><i class="bi bi-caret-left"></i></a>
+                    </div>
+                </div>
+                @php
                     $arr = [];
-                    // dd($arr);
-                        $y = 0;
-                    @endphp
+                @endphp
+                @if ($imgId == null )
+                    @foreach( $images[0]->photo as $key)
+                        @php
+                            $url = '/uploads/images/'.$key;
+                            array_push($arr, $url);
+                        @endphp
 
-                    {{-- <div id='frame'>
-                        {{ $images[0]->photo }}
-                    </div> --}}
-
-                    @if ($imgId == null )
-                        @foreach( $images[0]->photo as $key)
-                            <img id="img" src="{!!URL::asset('/uploads/images/'.$key) !!}" alt="..." class="px-0" width='50px'>
+                    @endforeach
+                @else
+                    @foreach ($images as $image)
+                        @if($image->id == $imgId)
+                            @foreach ($image->photo as $photo)
                             @php
-                                $url = '/uploads/images/'.$key;
+                                $url = '/uploads/images/'.$photo;
                                 array_push($arr, $url);
                             @endphp
-                        @endforeach
-                    @else
-                        @foreach ($images as $image)
-                            @if($image->id == $imgId)
-                                @foreach ($image->photo as $photo)
-                                <img id="img" src="{!!URL::asset('/uploads/images/'.$photo) !!}" alt="..." class="px-0" width='50px'>
-                                @php
-                                    $url = '/uploads/images/'.$photo;
-                                    array_push($arr, $url);
-                                @endphp
-                                @endforeach
-                            @endif
-                        @endforeach
-                    @endif
-                    <br><br>
-                    @foreach($colors as $color)
-                        @foreach ($images as $image)
-                            @if($color->id == $image->color_id)
-                            <a href="{{ route('products_types.show', ['imgId'=>$image->id, 'id'=> $id ]) }}" class="btn text-success rounded-circle border p-3 m-1" style="background-color:{{ $color->value }}"><small>  </small></a>
-                            @endif
-                        @endforeach
+                            @endforeach
+                        @endif
                     @endforeach
-                <script>
-                    function myFunctionProduct(imgs) {
-                        var expandImg = document.getElementById("expandedImg");
-                        var imgText = document.getElementById("imgtext");
-                        expandImg.src = imgs.src;
-                        imgText.innerHTML = imgs.alt;
-                        expandImg.parentElement.style.display = "block";
-                    }
-                </script>
+                @endif
+                <br><br>
+                @foreach($colors as $color)
+                    @foreach ($images as $image)
+                        @if($color->id == $image->color_id)
+                        <a href="{{ route('products_types.show', ['imgId'=>$image->id, 'id'=> $id ]) }}" class="btn rounded-circle border p-3 m-1" style="background-color:{{ $color->value }}"><small>  </small></a>
+                        @endif
+                    @endforeach
+                @endforeach
             </div>
 
+            <script>
+                function myFunctionProduct(imgs) {
+                    var expandImg = document.getElementById("expandedImg");
+                    var imgText = document.getElementById("imgtext");
+                    expandImg.src = imgs.src;
+                    imgText.innerHTML = imgs.alt;
+                    expandImg.parentElement.style.display = "block";
+                }
+            </script>
+
+
+            <script>
+                var frame = '<?php echo json_encode($arr  )   ?>';
+                var frames = JSON.parse(frame)
+                // these are the frame numbers that will show a detail bubble
+                var details = [0, 8, 20];
+                // the current index in the details array
+                var detailIndex = 0;
+                // initialise spritespin
+                var spin = $('#spritespin');
+                spin.spritespin({
+                    source: frames,
+                    width: 600,
+                    sense: -1,
+                    height: 450,
+                    animate: false
+                });
+                // get the api object. This is used to trigger animation to play up to a specific frame
+                var api = spin.spritespin("api");
+                spin.bind("onLoad", function(){
+                    var data = api.data;
+                    data.stage.prepend($(".details .detail")); // add current details
+                    data.stage.find(".detail").hide();         // hide current details
+                }).bind("onFrame", function(){
+                    var data = api.data;
+                    data.stage.find(".detail:visible").stop(false).fadeOut();
+                    data.stage.find(".detail.detail-" + data.frame).stop(false).fadeIn();
+                });
+                $( "#prev" ).click(function(){
+                    setDetailIndex(detailIndex - 1);
+                });
+                $( "#next" ).click(function(){
+                    setDetailIndex(detailIndex + 1);
+                });
+                function setDetailIndex(index){
+                    detailIndex = index;
+                    if (detailIndex < 0){
+                        detailIndex = details.length - 1;
+                    }
+                    if (detailIndex >= details.length){
+                        detailIndex = 0;
+                    }
+                    api.playTo(details[detailIndex]);
+                }
+            </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <div id='spritespin'></div>
-
-                <button id="prev">PREV</button>
-                <button id="next">NEXT</button>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<script>
-    // use helper method to generate an array of image urls. We have 34 frames in total
-
-    // const frames = '<?php  $arr ?>';
-
-
-    // frames.forEach(function(element){
-
-    //    console.log(element) ;
-    // });
-
-
-    // const frames = [
-    //     '/src/photos/pageImage/Filename_01.jpg',
-    //     '/src/photos/pageImage/Filename_02.jpg',
-    //     '/src/photos/pageImage/Filename_03.jpg',
-    //     '/src/photos/pageImage/Filename_04.jpg',
-    //     '/src/photos/pageImage/Filename_05.jpg',
-    //     '/src/photos/pageImage/Filename_06.jpg',
-    //     '/src/photos/pageImage/Filename_07.jpg',
-    //     '/src/photos/pageImage/Filename_08.jpg',
-    //     '/src/photos/pageImage/Filename_09.jpg',
-    //     '/src/photos/pageImage/Filename_10.jpg',
-    //     '/src/photos/pageImage/Filename_11.jpg',
-    //     '/src/photos/pageImage/Filename_12.jpg',
-    //     '/src/photos/pageImage/Filename_13.jpg',
-    //     '/src/photos/pageImage/Filename_14.jpg',
-    //     '/src/photos/pageImage/Filename_15.jpg',
-    //     '/src/photos/pageImage/Filename_16.jpg',
-    //     '/src/photos/pageImage/Filename_17.jpg',
-    //     '/src/photos/pageImage/Filename_18.jpg',
-    //     '/src/photos/pageImage/Filename_19.jpg',
-
-    // ];
-
-    // console.log(frame);
-
-
-
-
-
-
-// these are the frame numbers that will show a detail bubble
-var details = [0, 8, 20];
-// the current index in the details array
-var detailIndex = 0;
-
-// initialise spritespin
-var spin = $('#spritespin');
-spin.spritespin({
-    source: '<?php  $arr ?>',
-    width: 480,
-    sense: -1,
-    height: 327,
-    animate: false
-});
-// get the api object. This is used to trigger animation to play up to a specific frame
-var api = spin.spritespin("api");
-
-spin.bind("onLoad", function(){
-    var data = api.data;
-    data.stage.prepend($(".details .detail")); // add current details
-    data.stage.find(".detail").hide();         // hide current details
-}).bind("onFrame", function(){
-    var data = api.data;
-    data.stage.find(".detail:visible").stop(false).fadeOut();
-    data.stage.find(".detail.detail-" + data.frame).stop(false).fadeIn();
-});
-
-$( "#prev" ).click(function(){
-    setDetailIndex(detailIndex - 1);
-});
-
-$( "#next" ).click(function(){
-    setDetailIndex(detailIndex + 1);
-});
-
-function setDetailIndex(index){
-    detailIndex = index;
-    if (detailIndex < 0){
-        detailIndex = details.length - 1;
-    }
-    if (detailIndex >= details.length){
-        detailIndex = 0;
-    }
-    api.playTo(details[detailIndex]);
-}
-</script>
 
 
 
@@ -564,7 +456,8 @@ function setDetailIndex(index){
                 اسيا : 07708460007
                 اثير : 07800049693
 
-                #عباية_ستايل</div>
+                #عباية_ستايل
+            </div>
         </div>
 
         {{-- ////////////////////////////////////////////////// --}}
