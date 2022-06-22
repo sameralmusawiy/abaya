@@ -1,6 +1,10 @@
 @extends('layouts.cplayouts.controlPanelLayouts')
 
 @section('content')
+
+
+
+
   <style>
      .card:hover {
         box-shadow: 0 4px 8px 0 rgba(3, 3, 3, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -9,7 +13,7 @@
      .card-title{
          font-family: cairo, arial, helvetica, sans-serif;
      }
-     
+
       .btnAction{
          font-size: 12px;
          text-decoration: none;
@@ -68,6 +72,60 @@
                                 <a  class="btnAction text-primary" href="{!!route ('products_types.edit', $productType->id)!!}" title="تعديل">تعديل<i class="bi bi-pencil"></i></a>
                                 <button class="btnAction text-danger" type="submit" onclick="return confirm('Are you sure?');" title="حذف" >حذف<i class="bi bi-trash"></i></button>
                             </form>
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn text-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                لون جديد
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container">
+                                            <form class="row g-3" style="text-align: right;" action="{!! route('images.save', $productType->id) !!}" method="POST"  enctype="multipart/form-data">
+                                                @csrf
+                                                <br><br>
+                                                {{-- <div class="col-md-12">
+                                                    <select id="inputIcon" name="product_id" class="form-control"  aria-label="Default select example">
+                                                        <option selected>اختر المنتج</option>
+                                                        @foreach ($products as $product)
+                                                            <option name="product_id" value="{{$product->id}}">
+                                                                {{$product->name}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div> --}}
+                                                <br><br><br>
+                                                <div class="mb-3">
+                                                    @foreach ($colors as $color)
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name='color_id' value="{{ $color->id }}" id="flexCheckDefault">
+                                                        <label class="form-check-label" for="flexCheckDefault" value="{{ $color->id }}">
+                                                        {{ $color->name }}
+                                                        </label>
+                                                    </div>
+                                                    @endforeach
+                                                </div><br>
+                                                <br><br>
+                                                <div class="col-md-12">
+                                                    <input id="inputIcon" type="file" name="photo[]" class="form-control" multiple="photo[]">
+                                                </div>
+                                                <br><br><br>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn text-white btn-primary">حفظ</button>
+                                                    {{-- <a class="btn text-danger" href="{{ route('products_types.index') }}">اغلاق</a> --}}
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -78,4 +136,29 @@
         {{ $productTypes->links() }}
     </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @endsection

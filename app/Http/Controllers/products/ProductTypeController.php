@@ -4,8 +4,6 @@ namespace App\Http\Controllers\products;
 use Illuminate\Support\Facades\File;
 use App\Models\ProductType;
 use App\Models\Images;
-use App\Models\Prodect_sizes;
-use App\Models\Prodect_fabrics;
 use App\Models\Color;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -15,6 +13,9 @@ use App\Models\Fabric;
 use App\Models\Size;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Session;
+use App\Models\Favorite;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProductTypeController extends Controller
 {
@@ -152,6 +153,10 @@ class ProductTypeController extends Controller
         return redirect(route('products_types.index', [$productTypeId]))->with('تم', 'تمت اضافة المنتج بنجاح');
     }
 
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function show(Request $request)
     {
         $products = Product::all();
@@ -163,9 +168,19 @@ class ProductTypeController extends Controller
         $colors = Color::all();
         $mainProducts = ProductType::all();
 
-        return view('site.details.eachProduct', compact('id','products_types','comments','products', 'mainProducts', 'images', 'colors', 'imgId'));
+        $itFavorate = DB::table('favorites')->where([
+            ['user_id', '=', Auth::user()->id],
+            ['productType_id', '=', $id],
+        ])->get();
+
+
+
+        return view('site.details.eachProduct', compact('id','products_types','comments','products', 'mainProducts', 'images', 'colors', 'imgId', 'itFavorate'));
     }
 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function edit($id)
     {
         $products = Product::all();
@@ -230,9 +245,10 @@ class ProductTypeController extends Controller
 
     public function home(ProductType $products_types)
     {
+        $colors = Color::all();
         $products = Product::all();
         $productTypes = ProductType::latest()->orderBy('created_at')->paginate(12);
-        return view('products.products_types.home', compact('productTypes', 'products')) ;
+        return view('products.products_types.home', compact('productTypes', 'products', 'colors')) ;
     }
 
     public function mainPart(Request $request, $id)

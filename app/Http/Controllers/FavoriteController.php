@@ -114,8 +114,12 @@ class FavoriteController extends Controller
      * @param  \App\Models\Favorite  $favorite
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Favorite $favorite)
+    public function destroy(Favorite $favorite, $id)
     {
-        //
+        $favorite = Favorite::find($id);
+        // dd($favorite);
+        $favorite->delete();
+        return redirect()->back();
+
     }
 }

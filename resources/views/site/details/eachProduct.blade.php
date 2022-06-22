@@ -35,7 +35,7 @@
     }
 
     .box {
-        width: 700px;
+        width: 100%;
         min-height: 200px;
         border: rgb(219, 219, 219) 3px dashed;
         border-width: 1px;
@@ -46,7 +46,7 @@
 
     @media only screen and (max-width:767px) {
         .box {
-            width: 550px;
+            /* width: 550px; */
             border: rgb(219, 219, 219) 3px dashed;
             border-width: 1px;
 
@@ -56,7 +56,7 @@
 
     @media only screen and (max-width:600px) {
         .box {
-            width: 450px;
+            /* width: 450px; */
             border: rgb(255, 255, 255) 2px dashed;
             border-width: 1px;
 
@@ -67,7 +67,7 @@
     @media only screen and (max-width:500px) {
         .box {
             margin-top: 10px;
-            width: 320px;
+            /* width: 320px; */
             border: rgb(219, 219, 219) 3px dashed;
             border-width: 1px;
 
@@ -123,7 +123,7 @@
     }
 
     .number-input {
-        border: 2px solid #ddd;
+        border: 1px solid #ddd;
         display: inline-flex;
     }
 
@@ -139,8 +139,8 @@
         border: none;
         align-items: center;
         justify-content: center;
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 1rem;
+        height: 1rem;
         cursor: pointer;
         margin: 0;
         position: relative;
@@ -164,8 +164,8 @@
         padding: .5rem;
         border: solid #ddd;
         border-width: 0 2px;
-        font-size: 1rem;
-        height: 1.5rem;
+        font-size: .8rem;
+        height: 1rem;
         font-weight: bold;
         text-align: center;
     }
@@ -219,6 +219,16 @@
         cursor: pointer;
     }
 
+
+    @media only screen and (max-width:650px) {
+        .spritespin-canvas{
+        width: 75% !important;
+        height:  75% !important;
+    }
+    }
+
+
+
 </style>
 
 
@@ -243,9 +253,31 @@
                     <div id="imgtext"></div>
                 </div> --}}
                 {{-- ////////////////////////////////////////////////////// الصور الصغيرة //////////////////////////////////////////////////////////////////////////  --}}
+                {{-- @php
+                dd($itFavorate[0]);
+            @endphp --}}
                 <div class="row">
+                    @if (isset ($itFavorate[0]->id))
+
+                        <form action=" {{ route('favorites.destroy', $itFavorate[0]) }}" method="POST" enctype="multipart/form-data">
+                            @method('DELETE')
+                            @csrf
+                            <button type='submit' class="btn   mx-0 mt-1">
+                                <p class=" text-danger m-0 "><i class="bi bi-heart-fill"></i></p>
+                            </button>
+                        </form>
+                    @else
+                    <form action=" {!!route ('favorites.save' , $products_types->id)!!}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <button class="btn  mx-0 mt-1" href="">
+                            <p class=" text-dark m-0 "><i class="bi bi-heart-fill"></i></p>
+                        </button>
+                    </form>
+
+                    @endif
+
                     <div class="d-block text-center">
-                        <div id='spritespin'></div>
+                        <div id='spritespin' style="user-select: none; position: relative; overflow: hidden; width: 100% !important; 100% !important;"></div>
                         <a class='btn rounded-circle border p-2 m-1 d-inline' id="prev"><i class="bi bi-caret-right"></i></a>
                         <a class='btn rounded-circle border p-2 m-1 d-inline' id="next"><i class="bi bi-caret-left"></i></a>
                     </div>
@@ -305,9 +337,9 @@
                 var spin = $('#spritespin');
                 spin.spritespin({
                     source: frames,
-                    width: 600,
+                    // width: 600,
                     sense: -1,
-                    height: 450,
+                    // height: 450,
                     animate: false
                 });
                 // get the api object. This is used to trigger animation to play up to a specific frame
@@ -405,21 +437,18 @@
                                 </div>
                                 @endforeach
                             </div>
-                            <button class="px-1 py-1 text-white  rounded mt-4 small" style="background-color: black">اضافة الى السلة <i class="bi bi-cart4"></i></button>
-                            <div class="number-input bg-light">
-                                <a onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"><i class="bi bi-dash"></i>
-                                </a>
-                                <input class="quantity" min="0" name="quantity" value="1" type="number">
-                                <a onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"><i class="bi bi-plus"></i>
-                                </a>
+                            <div class='mt-1'>
+                                <button class="  text-white mt-4 small d-inline" style="background-color: black">اضافة الى السلة <i class="bi bi-cart4"></i></button>
+                                <div class="number-input bg-light d-inline">
+                                    <a onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"><i class="bi bi-dash"></i>
+                                    </a>
+                                    <input class="quantity" min="0" name="quantity" value="1" type="number">
+                                    <a onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"><i class="bi bi-plus"></i>
+                                    </a>
+                                </div>
                             </div>
                         </form>
-                        <form action="{!!route ('favorites.save' , $products_types->id)!!}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <button class="submit btn btn-dark mx-0 mt-1">
-                                <p class="small m-0">اضف الى قائمة المفضلات <i class="bi bi-heart"></i></p>
-                            </button>
-                        </form>
+
                     </h6>
                 </div>
             </div>
@@ -468,7 +497,6 @@
                 document.getElementById("three_element3").style.display = "none";
                 document.getElementById(elementId).style.display = "block";
             }
-
         </script>
         <form action="{!! route('comment.save', $products_types->id) !!}" method="POST" enctype="multipart/form-data">
             @csrf

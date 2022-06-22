@@ -67,7 +67,7 @@
             </tr>
         </thead>
         <tbody class='p-5'>
-            <h3 class='text-secondary'>طلبية رقم: {{ $order->order_no }}</h3>
+            <h3 class='text-secondary'>طلبية رقم: AS-{{ $order->order_no }}</h3>
 
             @foreach ($order->baskets()->get() as $item)
             <tr >

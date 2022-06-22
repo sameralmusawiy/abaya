@@ -134,6 +134,11 @@ Route::namespace('pages')->group(function() {
     Route::resource('payment_Methods', 'PaymentMethodsController');
 });
 
+/////////////// Images Route ////////////////////////////////////////////////////////////////
+Route::post('/images/save/{id}', 'ImageController@save')->name('images.save');
+
+Route::resource('images', 'ImageController');
+
 
 
 /////////////// products Route /////////////////////////////////////////////////////////////////

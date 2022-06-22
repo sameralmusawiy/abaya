@@ -2,20 +2,10 @@
 
 namespace App\Http\Controllers\users;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Models\Comment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use App\Models\ProductType;
-use App\Models\Prodect_colors;
-use App\Models\Prodect_sizes;
-use App\Models\Prodect_fabrics;
-use App\Models\Color;
-use App\Models\Product;
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\Fabric;
-use App\Models\Size;
 
 class CommentController extends Controller
 {
@@ -63,7 +53,7 @@ class CommentController extends Controller
 
         $comments->save();
 
-        return redirect(route('products_types.index'));
+        return redirect()->back();
 
     }
 
@@ -85,7 +75,7 @@ class CommentController extends Controller
 
         $comments->save();
 
-        return redirect(route('products_types.home'));
+        return redirect()->back();
 
     }
 
