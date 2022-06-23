@@ -6,14 +6,13 @@ use App\Http\Controllers;
 use App\Models\Basket;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
 use App\Models\Ads;
 use App\Models\Delivery;
+use Illuminate\Support\Facades\DB;
 
 class UserInfoController extends Controller
 {
@@ -60,7 +59,6 @@ class UserInfoController extends Controller
         $request->validate([
             'name'             => 'required',
             'phonenumber'      => 'required',
-            'country'          => 'required',
             'city'             => 'required',
             'district'         => 'required',
             'address'          => 'required',
@@ -128,13 +126,11 @@ class UserInfoController extends Controller
         $userCity = $userInfoCity;
         $deliveries = Delivery::all();
         $deliveryPrice = 0 ;
-        $totalPrice = 0 ;
-        foreach ($deliveries as $item) {
-            if ($item->city == $userCity) {
-                $deliveryPrice = $item->price;
-                $totalPrice = ( (\Cart::getTotal()) + $item->price);
-            }
-        }
+        $totalPrice =(\Cart::getTotal());
+
+        $deliveryPrice = DB::table('deliveries')->where('city', $userCity)->pluck('price');
+
+
         return view('site.details.confirm', compact('userCity', 'products', 'deliveryPrice', 'totalPrice', 'orderId' ));
     }
 
@@ -144,8 +140,9 @@ class UserInfoController extends Controller
         $order = Order::find($id);
         $order->isConfirm = 1;
         $order->save();
-        return redirect(route('userInfo'));
-    }
+
+        return redirect()->back()->with('success','تمت عملية الشراء بنجاح');
+        }
 
     /**
      * Display the specified resource.

@@ -123,7 +123,7 @@
     }
 
     .number-input {
-        border: 1px solid #ddd;
+        border: 0px solid #ddd;
         display: inline-flex;
     }
 
@@ -135,15 +135,16 @@
     .number-input button {
         outline: none;
         -webkit-appearance: none;
-        /* background-color: transparent; */
+        background-color: transparent;
         border: none;
         align-items: center;
         justify-content: center;
-        width: 1rem;
-        height: 1rem;
+        width: 1.5rem;
+        height: 1.8rem;
         cursor: pointer;
         margin: 0;
         position: relative;
+
     }
 
     /* .number-input button:after {
@@ -163,9 +164,9 @@
         max-width: 3rem;
         padding: .5rem;
         border: solid #ddd;
-        border-width: 0 2px;
-        font-size: .8rem;
-        height: 1rem;
+        border-width: 0 1px;
+        font-size: 1rem;
+        height: 1.8rem;
         font-weight: bold;
         text-align: center;
     }
@@ -257,22 +258,29 @@
                 dd($itFavorate[0]);
             @endphp --}}
                 <div class="row">
-                    @if (isset ($itFavorate[0]->id))
+                    @if (isset ($itFavorate[0]))
 
-                        <form action=" {{ route('favorites.destroy', $itFavorate[0]) }}" method="POST" enctype="multipart/form-data">
+                        <form action=" {{ route('favorites.destroy', $itFavorate[0]->id) }}" method="POST" enctype="multipart/form-data">
                             @method('DELETE')
                             @csrf
-                            <button type='submit' class="btn   mx-0 mt-1">
+                            <button type='submit' class="text-danger border-0 bg-white mx-0 mt-1">
                                 <p class=" text-danger m-0 "><i class="bi bi-heart-fill"></i></p>
                             </button>
                         </form>
                     @else
-                    <form action=" {!!route ('favorites.save' , $products_types->id)!!}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <button class="btn  mx-0 mt-1" href="">
-                            <p class=" text-dark m-0 "><i class="bi bi-heart-fill"></i></p>
-                        </button>
-                    </form>
+                        @if (Auth::check())
+                            <form action=" {!!route ('favorites.save' , $products_types->id)!!}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <button type="submit"class="text border-0 bg-white mx-0 mt-1" href="">
+                                    <p class=" text-dark m-0 "><i class="bi bi-heart-fill"></i></p>
+                                </button>
+                            </form>
+                        {{-- @else
+                            <div class="alert alert-danger" role="alert">
+                                قم بتسجيل الدخول اولا !
+                            </div> --}}
+                        @endif
+
 
                     @endif
 
@@ -422,10 +430,14 @@
                             </div>
                             <div class='mt-1'>
                                 <h6 class="card-text small">اللون</h6>
-                                @foreach ($allcolor as $color)
-                                <div class="form-check form-check-inline">
-                                    <input style="background-color:{{ $color }} " class="form-check-input" type="radio" name="color" id="inlineRadio2" value="{{ $color }}">
-                                </div>
+                                @foreach ($colors as $color)
+                                    @foreach ($images as $image)
+                                        @if($color->id == $image->color_id)
+                                            <div class="form-check form-check-inline">
+                                                <input style="background-color:{{ $color->value }} " class="form-check-input" type="radio" name="color" id="inlineRadio2" value="{{ $color->value }}">
+                                            </div>
+                                        @endif
+                                    @endforeach
                                 @endforeach
                             </div>
                             <div class='mt-1'>
@@ -438,12 +450,12 @@
                                 @endforeach
                             </div>
                             <div class='mt-1'>
-                                <button class="  text-white mt-4 small d-inline" style="background-color: black">اضافة الى السلة <i class="bi bi-cart4"></i></button>
+                                <button class="  text-white mt-0 small d-inline p-1" style="background-color: black"> شراء <i class="bi bi-cart4"></i></button>
                                 <div class="number-input bg-light d-inline">
-                                    <a onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus"><i class="bi bi-dash"></i>
+                                    <a onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="minus p-1">-
                                     </a>
                                     <input class="quantity" min="0" name="quantity" value="1" type="number">
-                                    <a onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"><i class="bi bi-plus"></i>
+                                    <a onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus p-1">+
                                     </a>
                                 </div>
                             </div>

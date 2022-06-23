@@ -39,7 +39,7 @@
         font-weight: 400;
         font-size: 13px
     }
-    }
+
 
     .text {
         line-height: 15px
@@ -85,12 +85,17 @@
 
 <div class="container mt-5 d-flex justify-content-center mb-5">
     <div class="card p-4 mt-3">
+        @if(session('success'))
+            <div class="alert alert-success">
+                <i class="bi bi-check-circle-fill text-success"></i> {!! session('success') !!}
+            </div>
+        @endif
         <div class="first d-flex justify-content-between align-items-center mb-3">
             <div class="info"> <span class="d-block name">شكرا لك, {{ Auth::user()->name }}</span> </div>
         </div>
         <div class="text"><span class="d-block address mb-3">من محافظة: {{ $userCity }} </span> </div>
 
-        <div class="detail"> <span class="d-block summery">تم استلام طلبك بنجاح. سوف نقوم بأيصال الطلب لك في اقرب
+        <div class="detail"> <span class="d-block summery">   سوف نقوم بأيصال الطلب لك في اقرب
                 وقت ممكن, قم بتأكيد الطلب.</span>
         </div>
         <br><br>
@@ -101,8 +106,16 @@
         <hr>
         {{-- <div class="text"><span class="d-block address mb-3">مصاريف الشحن الى محافظتك: {{ $deliveryPrice }}
             </span> </div> --}}
-        <div class="text"><span class="d-block address mb-3">المبلغ الكلي + مصاريف الشحن: <h3
-                    class="d-inline text-danger">{{ $totalPrice }}</h3> د.ع</span> </div>
+        @if (isset($deliveryPrice[0]))
+        <div class="text"><span class="d-block address mb-3">المبلغ الكلي + مصاريف الشحن:
+            <h3 class="d-inline text-danger">{{ $totalPrice }} + {{ $deliveryPrice[0] }}</h3>
+             د.ع</span> </div>
+        @else
+        <div class="text"><span class="d-block address mb-3">المبلغ الكلي + مصاريف الشحن:
+            <h3 class="d-inline text-danger">{{ $totalPrice }} + 0</h3>
+             د.ع</span> </div>
+        @endif
+
 
         <div class=" money d-flex flex-row mt-2 align-items-center"><span class="ml-2">يرجى تسليم المبلغ الكلي
                 و مصاريف الشحن الى مندوب التوصيل بعد فحص المنتج بدقة.</span> </div>

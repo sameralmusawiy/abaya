@@ -24,9 +24,7 @@ use App\Models\Product;
 |
 */
 
-// Route::get('/', function () {
-//     return view('site/details/eachProduct');
-// });
+
 
 Route::get('/', function () {
     $products = Product::all();

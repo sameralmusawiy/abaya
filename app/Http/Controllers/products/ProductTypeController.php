@@ -167,12 +167,13 @@ class ProductTypeController extends Controller
         $images   = $products_types -> images()->get();
         $colors = Color::all();
         $mainProducts = ProductType::all();
-
         $itFavorate = DB::table('favorites')->where([
             ['user_id', '=', Auth::user()->id],
             ['productType_id', '=', $id],
         ])->get();
 
+
+        // $itFavorate =2;
 
 
         return view('site.details.eachProduct', compact('id','products_types','comments','products', 'mainProducts', 'images', 'colors', 'imgId', 'itFavorate'));

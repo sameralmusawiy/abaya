@@ -7,8 +7,8 @@
     border-radius:15px;
 }
 #sCard{
-    padding-left:20%;
-    padding-right:20%;
+    padding-left:10%;
+    padding-right:10%;
 }
 
 </style>
@@ -123,27 +123,21 @@
             <div class="card-body">
                 <h5 class="card-title mb-5">يرجى ملء الحقول التالية لكي يكتمل الطلب</h5>
 
-                <form class="row g-3"action="{{ route('userInfo.store') }}" method="POST"  enctype="multipart/form-data">
+                <form class="row g-3"action="{{ route('userInfo.store') }}" method="POST"  enctype="multipart/form-data" name="myForm" onsubmit="return validateForm()">
                     @csrf
-                    <div class="col-12">
+                    <div class="col-6 "> <p class="text-right text-danger p-0 m-0">*</p>
                         <input type="text" name='name' class="form-control" placeholder="الاسم الرباعي" >
                     </div>
-                    <div class="col-12">
-                    <input type="email" name='email' class="form-control" id="inputEmail4" placeholder="البريد الالكتروني">
+                    <div class="col-6"><p class="text-right text-danger p-0 m-0">*</p>
+                        <input type="email" name='email' class="form-control" id="inputEmail4" placeholder="البريد الالكتروني">
                     </div>
-                    <div class="col-12">
-                    <input type="text" name='phonenumber' class="form-control" id="inputPassword4" placeholder="رقم الهاتف">
+                    <div class="col-6"><p class="text-right text-danger p-0 m-0">*</p>
+                        <input type="text" name='phonenumber' class="form-control" id="inputPassword4" placeholder="رقم الهاتف">
                     </div>
-                    <div class="col-12">
-                        <input type="text" name='country' class="form-control" id="inputPassword4" placeholder="اسم البلد">
+                    <div class="col-6"><p class="text-right text-danger p-0 m-0">*</p>
+                        <input type="text" name='address' class="form-control" id="inputAddress2" placeholder="عنوان المنزل">
                     </div>
-                    <div class="col-md-12">
-                        <input type="text" name='zip' class="form-control" id="inputZip" placeholder="الرمز البريدي">
-                    </div>
-                    <div class="col-12">
-                    <input type="text" name='comp_name' class="form-control" id="inputAddress" placeholder="اسم الشركة (اختياري)">
-                    </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6"><p class="text-right text-danger p-0 m-0">*</p>
                         <select id="inputState" class="form-select form-control" name='city' >
                         <option selected value='النجف الاشرف' name='city'>النجف الاشرف</option>
                         <option value='كربلاء' name='city'>كربلاء</option>
@@ -165,23 +159,14 @@
 
                         </select>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6"><p class="text-right text-danger p-0 m-0">*</p>
                         <input type="text" name='district' class="form-control" id="inputCity" placeholder="اسم الحي / اسم المنطقة">
                     </div>
-                    <div class="col-12">
-                        <input type="text" name='home_no' class="form-control" id="inputAddress2" placeholder="رقم الشقة / الجناح / الوحدة / الخ (اختياري)">
-                    </div>
-
-                    <div class="col-12">
-                    <input type="text" name='address' class="form-control" id="inputAddress2" placeholder="عنوان المنزل">
-                    </div>
-
-                    <div class="col-12 ">
-                        <label class="form-check-label " name='date_of_birth' for="exampleCheck1">تاريخ الميلاد</label>
+                    <div class="col-6 text-right">تاريخ الميلاد<p class=" text-danger p-0 m-0 d-inline">  *</p>
                         <input type="date" class="form-control" id="birthday" name="date_of_birth" >
                     </div>
-                    <div class="col-12 ">
-                        <div class="form-check form-check-inline">
+                    <div class="col-6 text-right ">  <p class=" text-danger p-0 m-0 d-block">الجنس * :</p>
+                        <div class="form-check form-check-inline ">
                             <input class="form-check-input" name="gender" value="ذكر" type="radio"  id="inlineRadio1" >
                             <label class="form-check-label" for="inlineRadio1">ذكر</label>
                         </div>
@@ -190,7 +175,19 @@
                             <label class="form-check-label" for="inlineRadio2">انثى</label>
                         </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="col-6">
+                        <input type="text" name='country' class="form-control" id="inputPassword4" placeholder="اسم البلد">
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name='zip' class="form-control" id="inputZip" placeholder="الرمز البريدي">
+                    </div>
+                    <div class="col-6">
+                        <input type="text" name='home_no' class="form-control" id="inputAddress2" placeholder="رقم الشقة / الجناح / الوحدة / الخ (اختياري)">
+                    </div>
+                    <div class="col-6">
+                        <input type="text" name='comp_name' class="form-control" id="inputAddress" placeholder="اسم الشركة (اختياري)">
+                    </div>
+                    <div class="mb-3 text-right">
                         <label for="exampleFormControlTextarea1" class="form-label">ملاحظة الطلب (اختياري)</label>
                         <textarea class="form-control" name='note' id="exampleFormControlTextarea1" rows="5"></textarea>
                     </div>
@@ -222,7 +219,51 @@
 
 
 
+<script>
+    function validateForm() {
+        let a = document.forms["myForm"]["name"].value;
+        let b = document.forms["myForm"]["email"].value;
+        let c = document.forms["myForm"]["phonenumber"].value;
+        let d = document.forms["myForm"]["city"].value;
+        let e = document.forms["myForm"]["address"].value;
+        let f = document.forms["myForm"]["date_of_birth"].value;
+        let g = document.forms["myForm"]["gender"].value;
+        let h = document.forms["myForm"]["district"].value;
 
+        if (a == "") {
+            alert("يجب كتابة الاسم");
+            return false;
+        }
+        if (b == "") {
+            alert("يجب كتابة الايميل");
+            return false;
+        }
+        if (c == "") {
+            alert("يجب كتابة رقم الموبايل");
+            return false;
+        }
+        if (d == "") {
+            alert("يجب كتابة اسم المدينة");
+            return false;
+        }
+        if (e == "") {
+            alert("يجب كتابة العنوان الكامل");
+            return false;
+        }
+        if (f == "") {
+            alert("يجب كتابة تاريخ الميلاد");
+            return false;
+        }
+        if (g == "") {
+            alert("يجب اختيار الجنس");
+            return false;
+        }
+        if (h == "") {
+            alert("يجب كتابة اسم المنطقة");
+            return false;
+        }
+    }
+</script>
 
 
 

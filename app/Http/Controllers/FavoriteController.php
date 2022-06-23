@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Controllers\products;
 
 namespace App\Http\Controllers;
+
 use App\Models\Product;
 use App\Models\Favorite;
 use Illuminate\Http\Request;
@@ -22,8 +24,7 @@ class FavoriteController extends Controller
 
         $favorites = Favorite::all();
         // $favorites = Auth::user();
-        return view('pages.favorite', compact( 'products', 'favorites')) ;
-
+        return view('pages.favorite', compact('products', 'favorites'));
     }
 
     /**
@@ -46,32 +47,20 @@ class FavoriteController extends Controller
     {
         //
     }
-    public function save( $id)
+    public function save($id)
     {
-        $product_type = ProductType::find($id);
-        $all_favorite = Favorite::all();
-        $favorite =Favorite::where('productType_id',  $product_type->id)->first();
-            if ($favorite) {
-                if (Auth::user()->id == $favorite->user_id  && $product_type->id == $favorite->productType_id) {
-                    return redirect(route('favorites.index'));
-                }
-                else{
-                    $favorites = Favorite::create([
-                        'user_id'          =>Auth::user()->id,
-                        'productType_id'   =>  $product_type->id,
-                    ]);
-                    $favorites->save();
-                    return redirect(route('favorites.index'));
-                }
-            }
-            else  {
-                $favorites = Favorite::create([
-                    'user_id'          =>Auth::user()->id,
-                    'productType_id'   =>  $product_type->id,
-                ]);
-                $favorites->save();
-                return redirect(route('favorites.index'));
-            }
+        $itFavorate = DB::table('favorites')->where([
+            ['user_id', '=', Auth::user()->id],
+            ['productType_id', '=', $id],
+        ])->get();
+        if (empty($itFavorate[0])) {
+            $favorites = Favorite::create([
+                'user_id'          => Auth::user()->id,
+                'productType_id'   =>  $id,
+            ]);
+            $favorites->save();
+        }
+        return redirect()->back();
     }
 
     /**
@@ -114,12 +103,11 @@ class FavoriteController extends Controller
      * @param  \App\Models\Favorite  $favorite
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Favorite $favorite, $id)
+    public function destroy(Request $request, $id)
     {
         $favorite = Favorite::find($id);
         // dd($favorite);
         $favorite->delete();
         return redirect()->back();
-
     }
 }
